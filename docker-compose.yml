@@ -1,6 +1,6 @@
 services:
   watchtower:
-    image: nickfedor/watchtower
+    image: ghcr.io/nicholas-fedor/watchtower
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     command: --interval 30 --cleanup bot-stable bot-testing
