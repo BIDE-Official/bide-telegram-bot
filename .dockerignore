@@ -1,0 +1,12 @@
+.env
+.env.*
+.venv/
+credentials/
+__pycache__/
+*.pyc
+.DS_Store
+.git/
+.gitignore
+README.md
+BIDE-bot-design.md
+*.tar.gz

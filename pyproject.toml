@@ -1,0 +1,13 @@
+[project]
+name = "bide-bot"
+version = "0.1.0"
+description = "Telegram bot for BIDE backgammon federation"
+requires-python = ">=3.11"
+dependencies = [
+    "aiogram>=3.18,<4",
+    "gspread>=6,<7",
+    "google-auth>=2,<3",
+
+]
+
+[tool.aiogram]

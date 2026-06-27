@@ -1,0 +1,46 @@
+name: Build and Push
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Login to ghcr.io
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract tag name
+        id: tag
+        run: echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+      - name: Determine Docker tags
+        id: meta
+        run: |
+          TAG="${{ steps.tag.outputs.tag }}"
+          BASE="ghcr.io/${{ github.repository }}"
+          if [[ "$TAG" == *"-"* ]]; then
+            TAGS="${BASE}:testing,${BASE}:${TAG}"
+          else
+            TAGS="${BASE}:stable,${BASE}:latest,${BASE}:${TAG}"
+          fi
+          echo "tags=${TAGS}" >> $GITHUB_OUTPUT
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}

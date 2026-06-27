@@ -1,0 +1,8 @@
+.env
+.env.testing
+.venv/
+credentials/
+*.json
+__pycache__/
+*.pyc
+.DS_Store
