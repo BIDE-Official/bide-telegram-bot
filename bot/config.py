@@ -12,3 +12,11 @@ except ImportError:
 BOT_TOKEN = getenv("BOT_TOKEN", "")
 SPREADSHEET_ID = getenv("SPREADSHEET_ID", "")
 GOOGLE_CREDENTIALS = getenv("GOOGLE_CREDENTIALS", "credentials/service_account.json")
+
+
+def get_build_date() -> str:
+    path = Path(__file__).resolve().parent.parent / "build_date.txt"
+    try:
+        return path.read_text().strip()
+    except Exception:
+        return "unknown"

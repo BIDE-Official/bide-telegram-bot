@@ -7,6 +7,7 @@ from aiogram.fsm.state import State, StatesGroup
 from aiogram.types import FSInputFile
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
+from bot.config import get_build_date
 from bot.services.sheets import get_sheets
 from bot.services.elo import predict as elo_predict
 from bot.keyboards import (
@@ -250,7 +251,7 @@ async def _nav_admin(cid: int, bot, uid: int, msg_id: int, action: str = ""):
         kb_with_all = types.InlineKeyboardMarkup(inline_keyboard=final)
         await bot.edit_message_text(text="Выбери получателя:", chat_id=cid, message_id=msg_id, reply_markup=kb_with_all)
     else:
-        await bot.edit_message_text(text="Кабинет начальства:", chat_id=cid, message_id=msg_id, reply_markup=admin_menu_keyboard())
+        await bot.edit_message_text(text=f"Кабинет начальства:\n🛠 {get_build_date()}", chat_id=cid, message_id=msg_id, reply_markup=admin_menu_keyboard())
 
 
 def _format_rating(sheets, username: str = "") -> str:
@@ -282,7 +283,7 @@ async def menu_admin_cabinet(message: types.Message):
     if not sheets.is_admin(message.from_user.id):
         await message.answer("Ты не начальство.")
         return
-    await message.answer("Кабинет начальства:", reply_markup=admin_menu_keyboard())
+    await message.answer(f"Кабинет начальства:\n🛠 {get_build_date()}", reply_markup=admin_menu_keyboard())
 
 
 class InviteFSM(StatesGroup):

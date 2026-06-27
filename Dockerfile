@@ -13,6 +13,8 @@ RUN rm -rf /usr/local/lib/python3.14/idlelib \
            /usr/local/lib/python3.14/site-packages/pip-*.dist-info \
            /var/cache/apk/*
 WORKDIR /app
+ARG BUILD_DATE
+RUN echo "$BUILD_DATE" > /app/build_date.txt
 COPY pyproject.toml uv.lock ./
 RUN apk add --no-cache upx \
  && uv sync --frozen --no-dev \

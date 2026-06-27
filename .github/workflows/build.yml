@@ -35,9 +35,14 @@ jobs:
             echo "tags=${BASE}:testing" >> $GITHUB_OUTPUT
           fi
 
+      - name: Prepare build date
+        id: prep
+        run: echo "build_date=$(date -u +'%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_OUTPUT
+
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
           context: .
           push: true
           tags: ${{ steps.meta.outputs.tags }}
+          build-args: BUILD_DATE=${{ steps.prep.outputs.build_date }}
