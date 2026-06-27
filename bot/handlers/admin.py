@@ -192,8 +192,7 @@ async def cmd_send(message: types.Message):
         return
 
     admins = sheets.get_admins()
-    sender_name = message.from_user.username or f"id{message.from_user.id}"
-    log = f"📋 @{sender_name} → @{username}:\n\n{text}"
+    log = f"Начальство → @{username}:\n\n{text}"
     for admin in admins:
         try:
             await message.bot.send_message(int(admin["tg_id"]), log)
