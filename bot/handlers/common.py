@@ -516,6 +516,16 @@ async def nav_send_text(message: types.Message, state: FSMContext):
         if m:
             try:
                 await message.bot.send_message(int(m["tg_id"]), f"✉ Сообщение от начальства:\n\n{text}")
+
+                admins = sheets.get_admins()
+                sender_name = message.from_user.username or f"id{message.from_user.id}"
+                log = f"📋 @{sender_name} → @{m['username']}:\n\n{text}"
+                for admin in admins:
+                    try:
+                        await message.bot.send_message(int(admin["tg_id"]), log)
+                    except Exception:
+                        pass
+
                 await message.answer(f"Сообщение отправлено @{m['username']}.")
             except Exception:
                 await message.answer(f"Не удалось отправить @{m['username']}.")
