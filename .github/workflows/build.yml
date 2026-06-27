@@ -2,6 +2,8 @@ name: Build and Push
 
 on:
   push:
+    branches:
+      - master
     tags:
       - 'v*'
 
@@ -22,21 +24,15 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract tag name
-        id: tag
-        run: echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
-
-      - name: Determine Docker tags
+      - name: Set Docker tag
         id: meta
         run: |
-          TAG="${{ steps.tag.outputs.tag }}"
           BASE="ghcr.io/${{ github.repository }}"
-          if [[ "$TAG" == *"-"* ]]; then
-            TAGS="${BASE}:testing,${BASE}:${TAG}"
+          if [[ "${{ github.ref }}" == refs/tags/v* ]]; then
+            echo "tags=${BASE}:stable" >> $GITHUB_OUTPUT
           else
-            TAGS="${BASE}:stable,${BASE}:latest,${BASE}:${TAG}"
+            echo "tags=${BASE}:testing" >> $GITHUB_OUTPUT
           fi
-          echo "tags=${TAGS}" >> $GITHUB_OUTPUT
 
       - name: Build and push
         uses: docker/build-push-action@v6
