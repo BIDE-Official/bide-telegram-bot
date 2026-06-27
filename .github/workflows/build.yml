@@ -27,7 +27,8 @@ jobs:
       - name: Set Docker tag
         id: meta
         run: |
-          BASE="ghcr.io/${{ github.repository }}"
+          REPO="${{ github.repository }}"
+          BASE="ghcr.io/${REPO,,}"
           if [[ "${{ github.ref }}" == refs/tags/v* ]]; then
             echo "tags=${BASE}:stable" >> $GITHUB_OUTPUT
           else
