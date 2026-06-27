@@ -3,20 +3,20 @@ services:
     image: containrrr/watchtower
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    command: --interval 30 --cleanup bide-bot-prod bide-bot-testing
+    command: --interval 30 --cleanup bot-stable bot-testing
     restart: always
 
-  prod:
+  bot-stable:
     image: ghcr.io/bide-official/bide-telegram-bot:stable
-    container_name: bide-bot-prod
+    container_name: bot-stable
     restart: always
     env_file: .env
     volumes:
       - ./credentials:/app/credentials
 
-  testing:
+  bot-testing:
     image: ghcr.io/bide-official/bide-telegram-bot:testing
-    container_name: bide-bot-testing
+    container_name: bot-testing
     restart: always
     env_file: .env.testing
     volumes:
