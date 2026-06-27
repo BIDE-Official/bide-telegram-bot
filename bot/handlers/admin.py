@@ -187,9 +187,18 @@ async def cmd_send(message: types.Message):
             int(member["tg_id"]),
             f"✉ Сообщение от начальства:\n\n{text}",
         )
-        await message.answer(f"Сообщение отправлено @{username}.")
     except Exception:
         await message.answer(f"Не удалось отправить сообщение @{username}.")
+        return
+
+    admins = sheets.get_admins()
+    sender_name = message.from_user.username or f"id{message.from_user.id}"
+    log = f"📋 @{sender_name} → @{username}:\n\n{text}"
+    for admin in admins:
+        try:
+            await message.bot.send_message(int(admin["tg_id"]), log)
+        except Exception:
+            pass
 
 
 @router.message(Command("send_all"))
