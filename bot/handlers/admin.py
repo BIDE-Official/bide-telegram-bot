@@ -197,8 +197,8 @@ async def cmd_send(message: types.Message):
     for admin in admins:
         try:
             await message.bot.send_message(int(admin["tg_id"]), log)
-        except Exception:
-            pass
+        except Exception as e:
+            await message.answer(f"Не удалось отправить уведомление админу @{admin.get('username', admin['tg_id'])}: {e}")
 
 
 @router.message(Command("send_all"))
